@@ -78,6 +78,9 @@ namespace WebStore
             services.AddScoped<IProductService, SqlProductService>();
             //services.AddScoped<IEmployeesService, InMemoryEmployeeService>();
             //services.AddTransient<IEmployeesService, InMemoryEmployeeService>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ICartService, CookieCartService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -88,6 +91,7 @@ namespace WebStore
             }
 
             app.UseStaticFiles();
+            app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -104,7 +108,7 @@ namespace WebStore
 
             app.UseWelcomePage("/welcome");
           
-            RunSample(app);
+            //RunSample(app);
         }
 
         private void UseSampleErrorCheck(IApplicationBuilder app)
@@ -145,7 +149,6 @@ namespace WebStore
 
         private void ConfigV31(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseRouting();
 
             var helloMsg = _configuration["CustomHelloWorld"];
             helloMsg = _configuration["Logging:LogLevel:Default"];
