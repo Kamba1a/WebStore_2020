@@ -76,6 +76,7 @@ namespace WebStore
             //services.AddSingleton<InMemoryEmployeeService>();
             services.AddSingleton<IEmployeesService, InMemoryEmployeeService>();
             services.AddScoped<IProductService, SqlProductService>();
+            services.AddScoped<IOrdersService, SqlOrdersService>();
             //services.AddScoped<IEmployeesService, InMemoryEmployeeService>();
             //services.AddTransient<IEmployeesService, InMemoryEmployeeService>();
 
@@ -158,6 +159,11 @@ namespace WebStore
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name : "areas",
+                    pattern : "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                               // GET: /<controller>/details/{id}
@@ -171,6 +177,10 @@ namespace WebStore
             // Производим конфигурацию инфраструктуры MVC
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name : "areas",
+                    template : "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
                 // Добавляем обработчик маршрута по умолчанию
                 routes.MapRoute(
                     name: "default",
